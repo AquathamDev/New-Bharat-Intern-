@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      margin: 0;
+    }
+
+    .app-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 320px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #0072ff;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #0072ff;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0072ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+
+    #task-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .task-item.completed {
+      text-decoration: line-through;
+      color: grey;
+      background-color: #e0e0e0;
+    }
+
+    .task-item button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff6b6b;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .task-item button:hover {
+      background-color: #ff4757;
+    }
+
+    .task-item.completed button {
+      background-color: #28a745;
+    }
+
+    .task-item.completed button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>To-Do List App</h1>
+    <input type="text" id="task-input" placeholder="Add a new task">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="task-list"></ul>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const taskInput = document.getElementById('task-input');
+      const taskList = document.getElementById('task-list');
+
+      const addTask = () => {
+        const taskText = taskInput.value.trim();
+        if (taskText) {
+          const li = document.createElement('li');
+          li.textContent = taskText;
+          li.classList.add('task-item');
+
+          const completeButton = document.createElement('button');
+          completeButton.textContent = 'Complete';
+          completeButton.onclick = () => li.classList.toggle('completed');
+
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.onclick = () => li.remove();
+
+          li.appendChild(completeButton);
+          li.appendChild(deleteButton);
+          taskList.appendChild(li);
+
+          taskInput.value = '';
+        }
+      };
+
+      document.querySelector('button').addEventListener('click', addTask);
+    });
+  </script>
+</body>
+</html>
