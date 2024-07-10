@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient background */
+      margin: 0;
+    }
+
+    .quiz-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333333;
+      margin-top: 0;
+    }
+
+    .question {
+      font-size: 18px;
+      color: #555555;
+      margin-bottom: 20px;
+    }
+
+    .answers {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .answer {
+      margin: 10px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz App</h1>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the longest river in the world?",
+        answers: ["Amazon", "Nile", "Yangtze", "Mississippi"],
+        correctAnswer: "Nile"
+      },
+      {
+        question: "Who was the first President of the United States?",
+        answers: ["Thomas Jefferson", "Abraham Lincoln", "George Washington", "John Adams"],
+        correctAnswer: "George Washington"
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        answers: ["Au", "Ag", "Gd", "Go"],
+        correctAnswer: "Au"
+      },
+      {
+        question: "Who wrote 'Pride and Prejudice'?",
+        answers: ["Charlotte Brontë", "Mary Shelley", "Jane Austen", "Emily Dickinson"],
+        correctAnswer: "Jane Austen"
+      },
+      {
+        question: "In which year did the first modern Olympic Games take place?", 
+        answers: ["1892", "1896", "1900", "1904"],
+        correctAnswer: "1896"
+      },
+      {
+        question: "Which band released the album 'Abbey Road'?",
+        answers: ["The Rolling Stones", "The Beatles", "Pink Floyd", "Led Zeppelin"],
+        correctAnswer: "The Beatles"
+      },
+      {
+        question: "Who directed the movie 'Inception'?",
+        answers: ["Steven Spielberg", "Christopher Nolan", "Quentin Tarantino", "Martin Scorsese"],
+        correctAnswer: "Christopher Nolan"
+      },
+      {
+        question: "Which artist painted the 'Mona Lisa'?",
+        answers: ["Vincent van Gogh", "Pablo Picasso", "Michelangelo", "Leonardo da Vinci"],
+        correctAnswer: "Leonardo da Vinci"
+      },
+      {
+        question: "What does 'HTTP' stand for in a website address?",
+        answers: ["HyperText Transfer Protocol", "HyperText Transmission Protocol", "HyperText Translation Protocol", "HyperText Transport Protocol"],
+        correctAnswer: "HyperText Transfer Protocol"
+      },
+      {
+        question: "Who is the current Secretary-General of the United Nations? (as of 2024)",
+        answers: ["António Guterres", "Ban Ki-moon", "Kofi Annan", "Boutros Boutros-Ghali"],
+        correctAnswer: "António Guterres"
+      },
+      {
+        question: "What is the main ingredient in guacamole?",
+        answers: ["Tomatoes", "Onions", "Avocados", "Lime"],
+        correctAnswer: "Avocados"
+      },
+      {
+        question: "What is the largest mammal in the world?",
+        answers: ["African Elephant", "Blue Whale", "Giraffe", "Orca"],
+        correctAnswer: "Blue Whale"
+      },
+      {
+        question: "What is the most spoken language in the world?",
+        answers: ["Spanish", "English", "Mandarin Chinese", "Hindi"],
+        correctAnswer: "Mandarin Chinese"
+      },
+      {
+        question: "In Greek mythology, who is the god of the sea?",
+        answers: ["Zeus", "Hades", "Apollo", "Poseidon"],
+        correctAnswer: "Poseidon"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        answers: ["Venus", "Mars", "Jupiter", "Saturn"],
+        correctAnswer: "Mars"
+      }
+    ];
+
+    const colors = ["#FFB6C1", "#ADD8E6", "#90EE90", "#FFD700", "#FF69B4", "#87CEFA", "#32CD32", "#FFA07A", "#8A2BE2", "#FF4500"];
+
+    const quizContainer = document.querySelector('.quiz-container');
+    const questionElement = document.getElementById('question');
+    const answersElement = document.getElementById('answers');
+    const resultElement = document.getElementById('result');
+
+    let currentQuestionIndex = 0;
+    let correctAnswersCount = 0;
+
+    function loadQuestion() {
+      const currentQuestion = quizData[currentQuestionIndex];
+      questionElement.textContent = currentQuestion.question;
+
+      answersElement.innerHTML = "";
+      currentQuestion.answers.forEach((answer, index) => {
+        const answerElement = document.createElement('div');
+        answerElement.textContent = answer;
+        answerElement.classList.add('answer');
+        answerElement.style.backgroundColor = colors[index % colors.length];
+        answerElement.addEventListener('click', () => checkAnswer(answer));
+        answersElement.appendChild(answerElement);
+      });
+    }
+
+    function checkAnswer(selectedAnswer) {
+      const currentQuestion = quizData[currentQuestionIndex];
+      if (selectedAnswer === currentQuestion.correctAnswer) {
+        resultElement.textContent = "Correct!";
+        correctAnswersCount++;
+      } else {
+        resultElement.textContent = "Wrong! The correct answer is: " + currentQuestion.correctAnswer;
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizData.length) {
+        setTimeout(loadQuestion, 1000); // Load next question after 1 second
+      } else {
+        showFinalResult();
+      }
+    }
+
+    function showFinalResult() {
+      questionElement.textContent = "Quiz completed!";
+      answersElement.innerHTML = "";
+      resultElement.textContent = "Your score: " + correctAnswersCount + " out of " + quizData.length;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
